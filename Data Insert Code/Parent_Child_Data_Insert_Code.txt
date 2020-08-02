@@ -1,0 +1,67 @@
+
+//////////////////////////////////// 조회 관계 설정용 부모 개체 등록용 ////////////////////////////////////////
+Parent__c parent = new Parent__c();
+
+parent.Text__c = '부모 참조용';
+
+insert parent;
+
+//////////////////////////////////// 레코드 타입 확인용 부모 개체 등록용 ////////////////////////////////////////
+// 이전에 등록한 부모 레코드 습득
+List<Parent__c> pList = [SELECT Id FROM Parent__c];
+Parent__c parent = new Parent__c();
+
+// 부모 레코드 생성
+parent.Url__c = 'https://www.google.com/';
+parent.LongTextArea__c = '긴 텍스트 영역 테스트';
+parent.Date__c = Date.Today();
+parent.Datetime__c = Datetime.now();
+parent.Percent__c = 100;
+parent.SelectList__c = 'a';
+parent.SelectListMultiple__c = 'a;b;c';
+parent.Decimal__c = 500;
+parent.Time__c = Datetime.now().time();
+parent.Email__c = 'abc@gmail.com';
+parent.Phone__c = '010-0000-0000';
+parent.TextArea__c = '텍스트 영역 테스트';
+parent.Text__c = '텍스트 테스트';
+parent.TextEncryption__c = '텍스트 암호화 테스트';
+parent.Currency__c = 15000;
+parent.Boolean__c = true;
+parent.Parents__c = pList.get(0).Id;
+
+// 부모 레코드 INSERT
+insert parent;
+
+//////////////////////////////////// 레코드 타입 확인용 자식 개체 등록용 ////////////////////////////////////////
+// 등록된 부모 레코드를 등록시간 역순으로 습득
+List<Parent__c> pList = [SELECT Id FROM Parent__c ORDER BY CreatedDate DESC];
+
+// INSERT용 자식 리스트 정의
+List<Child__c> insertChildList = new List<Child__c>();
+
+// 자식 레코드를 3개 생성
+Child__c child1 = new Child__c();
+child1.Date__c = Date.today();
+child1.Parents__c = pList.get(0).Id;
+child1.Decimal__c = 100;
+child1.Currency__c = 100;
+
+Child__c child2 = new Child__c();
+child2.Date__c = Date.today();
+child2.Parents__c = pList.get(0).Id;
+child2.Decimal__c = 1000;
+child2.Currency__c = 1000;
+
+Child__c child3 = new Child__c();
+child3.Date__c = Date.today();
+child3.Parents__c = pList.get(0).Id;
+child3.Decimal__c = 10000;
+child3.Currency__c = 10000;
+
+insertChildList.add(child1);
+insertChildList.add(child2);
+insertChildList.add(child3);
+
+// 자식 레코드 INSERT
+insert insertChildList;
